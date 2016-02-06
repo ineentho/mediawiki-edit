@@ -26,8 +26,12 @@ module.exports = MediawikiEdit =
 
         response = JSON.parse(body)
         for i, page of response.query.pages
-          content = page.revisions[0]['*']
-          atom.notifications.addSuccess 'Editing ' + pageName
+          content = ""
+          if page.revisions
+            content = page.revisions[0]['*']
+            atom.notifications.addSuccess 'Editing ' + pageName
+          else
+            atom.notifications.addSuccess 'Creating ' + pageName
           atom.focus()
           atom.workspace.open().then (editor) ->
             editor.setText content
